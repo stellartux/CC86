@@ -2,6 +2,7 @@
 
 <head>
   <meta charset="utf-8">
+  <title>Coding Challenge 86: Ripple Cube</title>
   <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.min.js"></script>
   <!-- uncomment lines below to include extra p5 libraries -->
   <script language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/addons/p5.dom.min.js"></script>
@@ -11,12 +12,24 @@
   <style>
     html, body {
       padding: 0;
-      margin: 0;
+      margin: 0 auto;
+      background-color: #F0F0F0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: sans-serif;
+    }
+    canvas {
+      order: 1;
+    }
+    input, label, h4 {
+      order: 2;
     }
   </style>
 </head>
 
 <body>
+  <h4>It's a rippley cube thing!</h4>
   <label>Point Color:<input type="color" id="pointColor" value="#FFDDAA"></input></label>
   <label>Ambient Color:<input type="color" id="ambientColor" value="#2A54A2"></input></label>
   <label>Material Color:<input type="color" id="materialColor" value="#E0E0B6"></input></label>
