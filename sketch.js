@@ -6,7 +6,7 @@ class Box {
       this.width = w
   }
   height(f) {
-    return sq(sin(f + this.offset)) * this.width
+    return sq(sin(-f + this.offset)) * this.width
   }
 
   render(f) {
