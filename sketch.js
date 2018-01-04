@@ -11,27 +11,29 @@ class Box {
 
   render(f) {
     push()
-      rotateX(-QUARTER_PI)
-      rotateY(QUARTER_PI)
+      rotateX(spin.x)
+      rotateY(spin.y)
       translate(this.x, this.height(f), this.z)
       box(this.width, 5 * this.width + 10 * this.height(f), this.width)
     pop()
   }
 }
 
-let boxes = []
+const boxes = []
 let speed
 let pointColor
 let ambientColor
 let materialColor
+let spin = {}
+let autospin
 
 function setup() {
-  createCanvas(400, 400, WEBGL)
+  let cnv = createCanvas(400, 400, WEBGL)
   ortho(-200,200,-200,200,-800,800,0,1000)
-  frameRate(20)
+  noStroke()
 
-  let boxwidth = 15
-  let cubecount = 7
+  const boxwidth = 15
+  const cubecount = 7
   for (let z = -cubecount; z <= cubecount; z++) {
     for (let x = -cubecount; x <= cubecount; x++) {
       let b = new Box(x, z, boxwidth)
@@ -39,37 +41,33 @@ function setup() {
     }
   }
 
-  noStroke()
-  pointColor = color("#FFDDAA")
-  ambientColor = color("#2A54A2")
-  materialColor = color("#E0E0B6")
-
-  document.getElementById("pointColor").addEventListener("input", updatePointColor, false)
-  document.getElementById("ambientColor").addEventListener("input", updateAmbientColor, false)
-  document.getElementById("materialColor").addEventListener("input", updateMaterialColor, false)
-
   speed = createSlider(1.5,12,5,0.001)
-}
+  pointColor = document.getElementById("pointColor")
+  ambientColor = document.getElementById("ambientColor")
+  materialColor = document.getElementById("materialColor")
 
-function updatePointColor(ev) {
-  pointColor = color(ev.target.value)
-}
+  spin.x = -QUARTER_PI
+  spin.y = QUARTER_PI
 
-function updateAmbientColor(ev) {
-  ambientColor = color(ev.target.value)
-}
-
-function updateMaterialColor(ev) {
-  materialColor = color(ev.target.value)
+  autospin = createCheckbox("Autospin", false)
 }
 
 function draw() {
   background(240)
-  pointLight(pointColor,800,-100,200)
-  ambientLight(ambientColor)
-  ambientMaterial(materialColor)
+  pointLight(color(pointColor.value),800,-100,200)
+  ambientLight(color(ambientColor.value))
+  ambientMaterial(color(materialColor.value))
   let f = frameCount/sq(speed.value())
   for (let b of boxes) {
     b.render(f)
   }
+  if (autospin.checked()) {
+    spin.x = (spin.x + speed.value() / 200) % TAU
+    spin.y = (spin.y + speed.value() / 282) % TAU
+  }
+}
+
+function mouseDragged() {
+  spin.y = (spin.y + (TAU * (mouseX - pmouseX)/width) * (sin(spin.x) < 0 ? 1 : -1)) % TAU
+  spin.x = (spin.x - (TAU * (mouseY - pmouseY)/height)) % TAU
 }
